@@ -1,0 +1,39 @@
+import heapq as h 
+chars = ['a', 'b', 'c', 'd', 'e']
+freq =  [3, 5, 6, 4, 2]
+# chars = ['a', 'b', 'c', 'd', 'e', 'f']
+# freq = [ 5, 9, 12, 13, 16, 45]
+n=len(chars)
+array=[]
+class Node:
+    def __init__(self, symbol, value, left= None, right = None, treeTraversal='') -> None:
+        self.symbol=symbol
+        self.value=value
+        self.left=left
+        self.right=right
+        self.treeTraversal= treeTraversal
+    def __lt__(self, anotherNode):
+        return self.value < anotherNode.value
+for i in range(n):
+    h.heappush(array,Node(symbol=chars[i], value=freq[i]))
+for i in range(n):
+    print((array[i].symbol, array[i].value))
+flag= True
+while flag:
+    leftChild= h.heappop(array)
+    rightChild= h.heappop(array)
+    leftChild.treeTraversal='0'
+    rightChild.treeTraversal='1'
+    newNode=Node(symbol= leftChild.symbol+rightChild.symbol, value=leftChild.value+rightChild.value, left=leftChild, right=rightChild)
+    h.heappush(array, newNode)
+    if len(newNode.symbol)==n:
+        flag=False
+def nodeValues(node, value=''):
+    newValue = value + node.treeTraversal
+    if(node.left):
+        nodeValues(node.left, newValue)
+    if(node.right):
+        nodeValues(node.right, newValue)
+    if(not node.left and not node.right):
+        print(f"{node.symbol} -> {newValue}")
+nodeValues(newNode)
